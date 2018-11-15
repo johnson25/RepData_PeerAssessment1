@@ -43,25 +43,58 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 =============================================================================================================
 
 ##1) Loading the data:
-```{r, echo = TRUE}
 
+```r
 Activity <- read.csv("activity.csv")
 dim(Activity)
-str(Activity)
-summary(Activity)
+```
 
+```
+## [1] 17568     3
+```
+
+```r
+str(Activity)
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+```
+
+```r
+summary(Activity)
+```
+
+```
+##      steps                date          interval     
+##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
+##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
+##  Median :  0.00   2012-10-03:  288   Median :1177.5  
+##  Mean   : 37.38   2012-10-04:  288   Mean   :1177.5  
+##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
+##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
+##  NA's   :2304     (Other)   :15840
 ```
 
 ##2) Pre-processing the data:
 
 Converting the Date column to POSIXCT using lubridate package
 
-```{r date_conversion, message = FALSE, echo=TRUE}
 
+```r
 library(lubridate)
 Activity$date <- ymd(Activity$date)
 str(Activity)
+```
 
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Date, format: "2012-10-01" "2012-10-01" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
 ================================================================================================================
@@ -74,32 +107,49 @@ When missing values were ignored-
 
 ##1) Calculating the total number of steps taken per day:
 
-```{r, echo=TRUE}
 
+```r
 total_steps_perday <- aggregate(steps~date, data=Activity, sum, na.rm = TRUE)
-
 ```
 
 ##2) Histogram of total number of steps taken per day:
 
-```{r, echo=TRUE}
 
+```r
 bluepalette <- colorRampPalette(c("skyblue", "darkblue"))
 hist(total_steps_perday$steps, main = "Total number of steps taken per day", xlab = "Number of steps taken per day", col=bluepalette(8), breaks=20)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
 png("Rep_plot1.png")
 dev.off()
+```
 
+```
+## png 
+##   2
 ```
 
 
 ##3) Mean and Median of the total number of steps taken per day:
 
-```{r, echo=TRUE}
 
+```r
 mean(total_steps_perday$steps)
-median(total_steps_perday$steps)
+```
 
+```
+## [1] 10766.19
+```
+
+```r
+median(total_steps_perday$steps)
+```
+
+```
+## [1] 10765
 ```
 
 ==================================================================================================================
@@ -110,24 +160,35 @@ median(total_steps_perday$steps)
 
 ##1) Time series plot of the 5-minute interval and the average number of steps taken, averaged across all the days:
 
-```{r, echo=TRUE}
 
+```r
 avg_steps <- aggregate(Activity$steps, by=list(Activity$interval), mean, na.rm = TRUE)
 names(avg_steps) <- c("interval", "mean")
 plot(avg_steps$interval, avg_steps$mean, type ="l", col = "black", lwd=2, xlab="interval", ylab="Average number of steps", main = "Time series plot of average number of steps")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+```r
 png("Rep_plot2.png")
 dev.off()
+```
 
+```
+## png 
+##   2
 ```
 
 
 ##2) The 5-minute interval which on average across all the days, has maximum number of steps:
 
-```{r, echo=TRUE}
 
+```r
 avg_steps[which.max(avg_steps$mean), ]$interval
+```
 
+```
+## [1] 835
 ```
 
 ==================================================================================================================
@@ -140,77 +201,114 @@ avg_steps[which.max(avg_steps$mean), ]$interval
 
 Firstly checking which columns contain NA values.
 
-```{r, echo=TRUE}
 
+```r
 any(is.na(Activity$steps))
-any(is.na(Activity$date))
-any(is.na(Activity$interval))
+```
 
+```
+## [1] TRUE
+```
+
+```r
+any(is.na(Activity$date))
+```
+
+```
+## [1] FALSE
+```
+
+```r
+any(is.na(Activity$interval))
+```
+
+```
+## [1] FALSE
 ```
 
 After learning that only "steps" column has missing values, Finding the number of missing values in that column:
 
-```{r, echo=TRUE}
 
+```r
 sum(is.na(Activity$steps))
+```
 
+```
+## [1] 2304
 ```
 
 Proportion of missing values:
 
-```{r, echo=TRUE}
 
+```r
 sum(is.na(Activity$steps)) / nrow(Activity)
+```
 
+```
+## [1] 0.1311475
 ```
 
 ##2) Imputing NA values with the mean of each day:
 
-```{r, echo=TRUE}
 
+```r
 Imputed_steps <- avg_steps$mean[match(Activity$interval, avg_steps$interval)] 
-
 ```
 
 ##3) Creating the new dataset which is similar to the original dataset but the missing values are imputed with mean:
 
-```{r, echo=TRUE}
 
+```r
 Imputed_Activity <- transform(Activity, steps = ifelse(is.na(Activity$steps), yes = Imputed_steps, no = Activity$steps))
-
 ```
 
 ##4) Histogram of total number of steps taken each day:
 
-```{r, echo=TRUE}
 
+```r
 Total_steps_imputed <- aggregate(steps ~ date, Imputed_Activity, sum)
 names(Total_steps_imputed) <- c("date", "sum_daily_steps")
-
 ```
 
-```{r, echo=TRUE}
 
+```r
 par(mfrow = c(1,2))
 
 hist(Total_steps_imputed$sum_daily_steps, main = "With Imputed Values", xlab = "Number of steps taken per day", col=bluepalette(8), breaks=20, ylim=c(0,30))
 
 hist(total_steps_perday$steps, main = "Without missing values", xlab = "Total number of steps taken per day", col=bluepalette(8), breaks=20, ylim = c(0,30))
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+```r
 png("Rep_plot3.png")
 dev.off()
+```
 
+```
+## png 
+##   2
 ```
 
 
 ## Mean & Median in the imputed datset:
 
-```{r, echo=TRUE}
 
+```r
 mean(Total_steps_imputed$sum_daily_steps)
+```
 
+```
+## [1] 10766.19
+```
+
+```r
 median(Total_steps_imputed$sum_daily_steps)
+```
 
+```
+## [1] 10766.19
 ```
 
 When compared the values of both the datsets are almost similar but the median of the imputed dataset is slightly higher when compared to the original dataset. This is due to the use of averaging functions to impute NA values. 
@@ -223,30 +321,37 @@ When compared the values of both the datsets are almost similar but the median o
 
 ##1) Creating a new factor variable with two levels to determine whether it is a weekday or weekend:
 
-```{r, echo=TRUE}
 
+```r
 Imputed_Activity$date <- as.Date(Imputed_Activity$date, format = "%Y-%m-%d")
 
 Imputed_Activity$day <- factor(format(Imputed_Activity$date, "%A"))
 levels(Imputed_Activity$day) <- list(weekday = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"), weekend = c("Saturday", "Sunday"))
-
 ```
 
 
 ##2) Panel plot with time series plots of the 5-minute interval and the average number of steps taken, averaged across all the days:
 
-```{r, echo=TRUE}
 
+```r
 library(ggplot2)
 
 Activity_day <- aggregate(steps ~ interval + day, Imputed_Activity, mean)
 
 Time_series <- ggplot(Activity_day, aes(x = interval, y = steps, color = day)) + geom_line() + labs(title = "Average steps taken daily according to type of the day", x = "Interval", y= "Average number of steps") + facet_wrap(~day, ncol = 1, nrow = 2)
 print(Time_series)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+
+```r
 png("Rep_plot4.png")
 dev.off()
+```
 
+```
+## png 
+##   2
 ```
 
 
