@@ -122,16 +122,6 @@ hist(total_steps_perday$steps, main = "Total number of steps taken per day", xla
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-```r
-png("Rep_plot1.png")
-dev.off()
-```
-
-```
-## png 
-##   2
-```
-
 
 ##3) Mean and Median of the total number of steps taken per day:
 
@@ -168,16 +158,6 @@ plot(avg_steps$interval, avg_steps$mean, type ="l", col = "black", lwd=2, xlab="
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
-
-```r
-png("Rep_plot2.png")
-dev.off()
-```
-
-```
-## png 
-##   2
-```
 
 
 ##2) The 5-minute interval which on average across all the days, has maximum number of steps:
@@ -281,16 +261,6 @@ hist(total_steps_perday$steps, main = "Without missing values", xlab = "Total nu
 
 ![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
-```r
-png("Rep_plot3.png")
-dev.off()
-```
-
-```
-## png 
-##   2
-```
-
 
 ## Mean & Median in the imputed datset:
 
@@ -343,16 +313,6 @@ print(Time_series)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
-
-```r
-png("Rep_plot4.png")
-dev.off()
-```
-
-```
-## png 
-##   2
-```
 
 
 

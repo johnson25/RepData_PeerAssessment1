@@ -87,8 +87,6 @@ total_steps_perday <- aggregate(steps~date, data=Activity, sum, na.rm = TRUE)
 bluepalette <- colorRampPalette(c("skyblue", "darkblue"))
 hist(total_steps_perday$steps, main = "Total number of steps taken per day", xlab = "Number of steps taken per day", col=bluepalette(8), breaks=20)
 
-png("Rep_plot1.png")
-dev.off()
 
 ```
 
@@ -116,8 +114,6 @@ avg_steps <- aggregate(Activity$steps, by=list(Activity$interval), mean, na.rm =
 names(avg_steps) <- c("interval", "mean")
 plot(avg_steps$interval, avg_steps$mean, type ="l", col = "black", lwd=2, xlab="interval", ylab="Average number of steps", main = "Time series plot of average number of steps")
 
-png("Rep_plot2.png")
-dev.off()
 
 ```
 
@@ -197,9 +193,6 @@ hist(Total_steps_imputed$sum_daily_steps, main = "With Imputed Values", xlab = "
 
 hist(total_steps_perday$steps, main = "Without missing values", xlab = "Total number of steps taken per day", col=bluepalette(8), breaks=20, ylim = c(0,30))
 
-png("Rep_plot3.png")
-dev.off()
-
 ```
 
 
@@ -244,8 +237,6 @@ Activity_day <- aggregate(steps ~ interval + day, Imputed_Activity, mean)
 Time_series <- ggplot(Activity_day, aes(x = interval, y = steps, color = day)) + geom_line() + labs(title = "Average steps taken daily according to type of the day", x = "Interval", y= "Average number of steps") + facet_wrap(~day, ncol = 1, nrow = 2)
 print(Time_series)
 
-png("Rep_plot4.png")
-dev.off()
 
 ```
 
