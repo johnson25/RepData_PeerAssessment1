@@ -43,7 +43,7 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 =============================================================================================================
 
 ##1) Loading the data:
-```{r, echo = TRUE}
+```{r,echo = TRUE}
 
 Activity <- read.csv("activity.csv")
 dim(Activity)
@@ -56,7 +56,7 @@ summary(Activity)
 
 Converting the Date column to POSIXCT using lubridate package
 
-```{r date_conversion, message = FALSE, echo=TRUE}
+```{r date_conversion,message = FALSE,echo=TRUE}
 
 library(lubridate)
 Activity$date <- ymd(Activity$date)
@@ -74,7 +74,7 @@ When missing values were ignored-
 
 ##1) Calculating the total number of steps taken per day:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 total_steps_perday <- aggregate(steps~date, data=Activity, sum, na.rm = TRUE)
 
@@ -82,7 +82,7 @@ total_steps_perday <- aggregate(steps~date, data=Activity, sum, na.rm = TRUE)
 
 ##2) Histogram of total number of steps taken per day:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE,fig.width=12}
 
 bluepalette <- colorRampPalette(c("skyblue", "darkblue"))
 hist(total_steps_perday$steps, main = "Total number of steps taken per day", xlab = "Number of steps taken per day", col=bluepalette(8), breaks=20)
@@ -93,7 +93,7 @@ hist(total_steps_perday$steps, main = "Total number of steps taken per day", xla
 
 ##3) Mean and Median of the total number of steps taken per day:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 mean(total_steps_perday$steps)
 median(total_steps_perday$steps)
@@ -108,7 +108,7 @@ median(total_steps_perday$steps)
 
 ##1) Time series plot of the 5-minute interval and the average number of steps taken, averaged across all the days:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE,fig.width=12}
 
 avg_steps <- aggregate(Activity$steps, by=list(Activity$interval), mean, na.rm = TRUE)
 names(avg_steps) <- c("interval", "mean")
@@ -120,7 +120,7 @@ plot(avg_steps$interval, avg_steps$mean, type ="l", col = "black", lwd=2, xlab="
 
 ##2) The 5-minute interval which on average across all the days, has maximum number of steps:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 avg_steps[which.max(avg_steps$mean), ]$interval
 
@@ -136,7 +136,7 @@ avg_steps[which.max(avg_steps$mean), ]$interval
 
 Firstly checking which columns contain NA values.
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 any(is.na(Activity$steps))
 any(is.na(Activity$date))
@@ -146,7 +146,7 @@ any(is.na(Activity$interval))
 
 After learning that only "steps" column has missing values, Finding the number of missing values in that column:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 sum(is.na(Activity$steps))
 
@@ -154,7 +154,7 @@ sum(is.na(Activity$steps))
 
 Proportion of missing values:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 sum(is.na(Activity$steps)) / nrow(Activity)
 
@@ -162,7 +162,7 @@ sum(is.na(Activity$steps)) / nrow(Activity)
 
 ##2) Imputing NA values with the mean of each day:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 Imputed_steps <- avg_steps$mean[match(Activity$interval, avg_steps$interval)] 
 
@@ -170,7 +170,7 @@ Imputed_steps <- avg_steps$mean[match(Activity$interval, avg_steps$interval)]
 
 ##3) Creating the new dataset which is similar to the original dataset but the missing values are imputed with mean:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE,fig.width=12}
 
 Imputed_Activity <- transform(Activity, steps = ifelse(is.na(Activity$steps), yes = Imputed_steps, no = Activity$steps))
 
@@ -198,7 +198,7 @@ hist(total_steps_perday$steps, main = "Without missing values", xlab = "Total nu
 
 ## Mean & Median in the imputed datset:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 mean(Total_steps_imputed$sum_daily_steps)
 
@@ -216,7 +216,7 @@ When compared the values of both the datsets are almost similar but the median o
 
 ##1) Creating a new factor variable with two levels to determine whether it is a weekday or weekend:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE}
 
 Imputed_Activity$date <- as.Date(Imputed_Activity$date, format = "%Y-%m-%d")
 
@@ -228,7 +228,7 @@ levels(Imputed_Activity$day) <- list(weekday = c("Monday", "Tuesday", "Wednesday
 
 ##2) Panel plot with time series plots of the 5-minute interval and the average number of steps taken, averaged across all the days:
 
-```{r, echo=TRUE}
+```{r,echo=TRUE,fig.width=12}
 
 library(ggplot2)
 
@@ -240,7 +240,9 @@ print(Time_series)
 
 ```
 
-
-
+```{r}
+library(knitr)
+knit("PA1_template.Rmd")
+```
 
 

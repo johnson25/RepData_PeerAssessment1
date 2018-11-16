@@ -120,7 +120,7 @@ bluepalette <- colorRampPalette(c("skyblue", "darkblue"))
 hist(total_steps_perday$steps, main = "Total number of steps taken per day", xlab = "Number of steps taken per day", col=bluepalette(8), breaks=20)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
 
 ##3) Mean and Median of the total number of steps taken per day:
@@ -157,7 +157,7 @@ names(avg_steps) <- c("interval", "mean")
 plot(avg_steps$interval, avg_steps$mean, type ="l", col = "black", lwd=2, xlab="interval", ylab="Average number of steps", main = "Time series plot of average number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
 
 
 ##2) The 5-minute interval which on average across all the days, has maximum number of steps:
@@ -259,7 +259,7 @@ hist(Total_steps_imputed$sum_daily_steps, main = "With Imputed Values", xlab = "
 hist(total_steps_perday$steps, main = "Without missing values", xlab = "Total number of steps taken per day", col=bluepalette(8), breaks=20, ylim = c(0,30))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png)
 
 
 ## Mean & Median in the imputed datset:
@@ -312,9 +312,22 @@ Time_series <- ggplot(Activity_day, aes(x = interval, y = steps, color = day)) +
 print(Time_series)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+![plot of chunk unnamed-chunk-17](figure/unnamed-chunk-17-1.png)
 
 
+```r
+library(knitr)
+knit("PA1_template.Rmd")
+```
 
+```
+## 
+## 
+## processing file: PA1_template.Rmd
+```
+
+```
+## Error in parse_block(g[-1], g[1], params.src): duplicate label 'date_conversion'
+```
 
 
